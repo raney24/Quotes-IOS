@@ -7,12 +7,17 @@
 //
 
 #import "AppDelegate.h"
+#import <RestKit/RestKit.h>
+#import "Stock.h"
 
 @interface AppDelegate ()
+
+@property(nonatomic, strong) NSArray *stocks;
 
 @end
 
 @implementation AppDelegate
+
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
