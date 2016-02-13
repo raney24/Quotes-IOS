@@ -9,7 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>BEMSimpleLineGraph.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ISO8601DateFormatterValueTransformer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RKValueTransformers.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,27 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>07BFC1945F54225225B4D21FC27ECCA2</key>
+		<key>0533FE72FDAEAA16E9481C4B208E7E31</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2676074CA82F2AA30F4D92D4756609D7</key>
+		<key>4C73E7BC5862A4FCE286711B65E5F460</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7F2062E4E785F61FC4EE5F6F9C3B2199</key>
+		<key>645A8C3E36EA4540A0290F513B3C1C58</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A2770197345BCE1622568AECE6B8E824</key>
+		<key>80F6C52629B397A07FB2869C33D5657C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6088836E877C4848489B6A41694A7AE</key>
+		<key>881A3BBF0E7AEC75F2E50D64974CA11A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A3123CBFAEA8F868A30B68D763CE37E0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B6ECA0E5F2CB3B49A7F9F0D0320CEC2B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BD0AAEFBBEC7118B14DA1CF93E520F2B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

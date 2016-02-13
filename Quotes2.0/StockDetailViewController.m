@@ -7,6 +7,7 @@
 //
 
 #import "StockDetailViewController.h"
+#import "BEMSimpleLineGraphView.h"
 #import <RestKit/RestKit.h>
 #import "Stock.h"
 #import "Earnings.h"
@@ -61,6 +62,7 @@
         _earnings = result.array;
         Earnings *firstOne = result.firstObject;
         NSLog(@"%@, %i", firstOne.before_price, _earnings.count);
+        [self.BEMGraphView reloadGraph];
 //        [self.view reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);
@@ -69,6 +71,18 @@
     
 }
 
+- (NSInteger)numberOfPointsInLineGraph:(BEMSimpleLineGraphView *)graph {
+    return _earnings.count;
+}
+
+- (CGFloat)lineGraph:(BEMSimpleLineGraphView *)graph valueForPointAtIndex:(NSInteger)index {
+    Earnings *earnings = _earnings[index];
+    
+    float percentChange = [earnings.percent_change floatValue];
+//    NSlog(@"%@", percentChange);
+    
+    return percentChange; // The value of the point on the Y-Axis for the index.
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

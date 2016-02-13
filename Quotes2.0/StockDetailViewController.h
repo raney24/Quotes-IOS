@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Stock.h"
+#import "BEMSimpleLineGraphView.h"
 
-@interface StockDetailViewController : UIViewController
+@interface StockDetailViewController : UIViewController <BEMSimpleLineGraphDataSource, BEMSimpleLineGraphDelegate>
+
+@property (weak, nonatomic) IBOutlet BEMSimpleLineGraphView *BEMGraphView;
 
 @property (strong, nonatomic) Stock *stock;
 

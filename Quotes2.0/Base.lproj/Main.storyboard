@@ -3,12 +3,12 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Root View Controller-->
         <scene sceneID="YmH-Ve-Ubp">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="e5t-QT-7UK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="I0Z-Td-aPz" customClass="StockTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DUO-O9-sZd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
@@ -43,10 +43,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Root View Controller" id="lc6-Q8-FwN"/>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e5t-QT-7UK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-462" y="-710"/>
         </scene>
-        <!--Title-->
+        <!--Data Source-->
         <scene sceneID="I6t-TE-Nmd">
             <objects>
                 <viewController id="AYN-80-th5" customClass="StockDetailViewController" sceneMemberID="viewController">
@@ -58,17 +59,63 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="642-GT-y6n">
-                                <rect key="frame" x="195" y="138" width="42" height="22"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="642-GT-y6n">
+                                <rect key="frame" x="34" y="93" width="42" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="485-HE-lG5"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Wt-Ij-ZQc" customClass="BEMSimpleLineGraphView">
+                                <rect key="frame" x="95" y="413" width="252" height="295"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="nwR-eH-Dng"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableYAxisLabel" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableXAxisLabel" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="nwR-eH-Dng"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <outlet property="dataSource" destination="AYN-80-th5" id="iz3-GB-unD"/>
+                                    <outlet property="delegate" destination="AYN-80-th5" id="g8c-u9-lJZ"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="3Wt-Ij-ZQc" firstAttribute="leading" secondItem="642-GT-y6n" secondAttribute="leading" id="8N0-zM-3X4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="3Wt-Ij-ZQc" secondAttribute="trailing" constant="47" id="MPJ-4V-24f"/>
+                            <constraint firstItem="3Wt-Ij-ZQc" firstAttribute="top" secondItem="hqM-g3-mdT" secondAttribute="top" constant="421" id="P4e-1v-HtG"/>
+                            <constraint firstItem="3Wt-Ij-ZQc" firstAttribute="leading" secondItem="hqM-g3-mdT" secondAttribute="leadingMargin" constant="14" id="Sfg-xu-Xcb"/>
+                            <constraint firstItem="3Wt-Ij-ZQc" firstAttribute="centerX" secondItem="hqM-g3-mdT" secondAttribute="centerX" id="b8O-17-bOe"/>
+                            <constraint firstItem="3Wt-Ij-ZQc" firstAttribute="top" secondItem="bWA-aP-8bi" secondAttribute="bottom" constant="349" id="bcY-Vq-FoH"/>
+                            <constraint firstItem="L5S-jq-q36" firstAttribute="top" secondItem="3Wt-Ij-ZQc" secondAttribute="bottom" constant="28" id="cGp-R5-I0V"/>
+                            <constraint firstItem="642-GT-y6n" firstAttribute="leading" secondItem="hqM-g3-mdT" secondAttribute="leadingMargin" constant="14" id="hfj-gq-U4N"/>
+                            <constraint firstItem="L5S-jq-q36" firstAttribute="top" secondItem="3Wt-Ij-ZQc" secondAttribute="bottom" constant="20" id="kDd-nX-zE8"/>
+                            <constraint firstItem="3Wt-Ij-ZQc" firstAttribute="leading" secondItem="hqM-g3-mdT" secondAttribute="leadingMargin" constant="75" id="mah-nB-qWY"/>
+                            <constraint firstItem="642-GT-y6n" firstAttribute="top" secondItem="bWA-aP-8bi" secondAttribute="bottom" constant="29" id="rgo-CG-2z7"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="8N0-zM-3X4"/>
+                                <exclude reference="P4e-1v-HtG"/>
+                                <exclude reference="Sfg-xu-Xcb"/>
+                                <exclude reference="b8O-17-bOe"/>
+                                <exclude reference="kDd-nX-zE8"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="HIg-mH-vjL"/>
                     <connections>
+                        <outlet property="BEMGraphView" destination="3Wt-Ij-ZQc" id="Pa7-G4-vu1"/>
                         <outlet property="stockTitleLabel" destination="642-GT-y6n" id="rB5-sV-em8"/>
                     </connections>
                 </viewController>
