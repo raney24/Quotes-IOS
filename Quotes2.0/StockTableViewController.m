@@ -20,7 +20,7 @@
 @implementation StockTableViewController
 
 - (void)viewDidLoad {
-    [self configureRestKit];
+    [self getStocks];
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -30,11 +30,44 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)configureRestKit
+- (void)postStock:(NSString *)symbolToAdd
 {
     // initialize AFNetworking HTTPClient
     
-    //    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
+    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
+    
+    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"symbol"]];
+    
+    RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodAny];
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+    
+    [objectManager addResponseDescriptor:indivResponseDescriptor];
+    
+    [objectManager.HTTPClient setAuthorizationHeaderWithUsername:@"raney24" password:@"sfenfcb@$"];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    
+    Stock *newStock = [Stock new];
+    newStock.symbol = symbolToAdd;
+    
+    [objectManager postObject:newStock path:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+
+    }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"failed w error: %@", [error localizedDescription]);
+    }];
+
+}
+
+- (void)getStocks
+{
+    // initialize AFNetworking HTTPClient
+    
+    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
     
     RKObjectMapping *stockMapping = [RKObjectMapping mappingForClass:[Stock class]];
     [stockMapping addAttributeMappingsFromDictionary:@{
@@ -48,42 +81,25 @@
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     
-    //    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:stockMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/:stockId" keyPath:nil statusCodes:statusCodes];
     
     RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:stockMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com/api/v1/stocks/"]];
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+    [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
     
-    RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request responseDescriptors:@[indivResponseDescriptor]];
-    
-    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *result) {
-        _stocks = result.array;
-        Stock *firstOne = result.firstObject;
+    [objectManager getObjectsAtPath:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        _stocks = mappingResult.array;
+        Stock *firstOne = mappingResult.firstObject;
         NSLog(@"%@, %i", firstOne.full_title, _stocks.count);
-                [self.tableView reloadData];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [self.tableView reloadData];
+    }failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);
     }];
-    [operation start];
+    
+    
+    
     
 }
-
-- (void)loadStocks
-{
-    NSLog(@"Hello");
-    [[RKObjectManager sharedManager] getObjectsAtPath:@"https://evening-everglades-1560.herokuapp.com/api/v1/stocks/"
-                                           parameters:nil
-                                              success:^(RKObjectRequestOperation *operation,
-                                                        RKMappingResult *stocksMappingResult) {
-                                                  _stocks = stocksMappingResult.array;
-                                                  NSLog(@"stocks: %@", _stocks);
-                                                  //                                                  [self.tableView reloadData];
-                                              }
-                                              failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                  NSLog(@"No results: %@", error);
-                                              }];
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -113,6 +129,31 @@
     return cell;
 }
 
+- (IBAction)addStockButtonPressed:(id)sender {
+    NSString *alertTitle = @"Enter Stock Symbol";
+    NSString *alertMessage = @"(lowercase is fine)";
+    
+    UIAlertController *alertController = [UIAlertController
+                                alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = NSLocalizedString(@"symbol", @"Login");
+    }];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK Action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action) {
+                                   UITextField *symbol = alertController.textFields.firstObject;
+                                   NSLog(@"symbol was %@", symbol.text);
+                                   [self postStock:symbol.text];
+                                   [self.tableView reloadData];
+                               }];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -168,6 +209,4 @@
         
     }
 }
-
-
 @end

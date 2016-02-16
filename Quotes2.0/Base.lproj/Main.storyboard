@@ -41,7 +41,17 @@
                             <outlet property="delegate" destination="I0Z-Td-aPz" id="BEO-Uk-Qrs"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="lc6-Q8-FwN"/>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="lc6-Q8-FwN">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Quu-bi-kc1" userLabel="Add Button">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="AGo-O9-k60">
+                                <rect key="frame" x="372" y="11" width="22" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="addStockButtonPressed:" destination="I0Z-Td-aPz" eventType="touchUpInside" id="1jG-wb-R1e"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e5t-QT-7UK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

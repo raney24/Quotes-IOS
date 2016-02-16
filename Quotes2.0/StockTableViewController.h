@@ -11,6 +11,8 @@
 
 @interface StockTableViewController : UITableViewController <UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
+- (IBAction)addStockButtonPressed:(id)sender;
+
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
