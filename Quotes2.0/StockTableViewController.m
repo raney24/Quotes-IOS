@@ -13,7 +13,7 @@
 
 @interface StockTableViewController ()
 
-@property(nonatomic, strong) NSArray *stocks;
+@property(nonatomic, strong) NSMutableArray *stocks;
 
 @end
 
@@ -88,9 +88,7 @@
     [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
     
     [objectManager getObjectsAtPath:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        _stocks = mappingResult.array;
-        Stock *firstOne = mappingResult.firstObject;
-        NSLog(@"%@, %i", firstOne.full_title, _stocks.count);
+        _stocks = [[NSMutableArray alloc] initWithArray:mappingResult.array];
         [self.tableView reloadData];
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);
@@ -123,36 +121,51 @@
     Stock *stock = _stocks[indexPath.row];
     
     NSString *fullTitle = stock.full_title;
+    NSString *symbol = stock.symbol;
     
     cell.textLabel.text = fullTitle;
+    cell.detailTextLabel.text = symbol;
     
     return cell;
 }
 
 - (IBAction)addStockButtonPressed:(id)sender {
     NSString *alertTitle = @"Enter Stock Symbol";
-    NSString *alertMessage = @"(lowercase is fine)";
+//    NSString *alertMessage = @"(lowercase is fine)";
     
     UIAlertController *alertController = [UIAlertController
                                 alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = NSLocalizedString(@"symbol", @"Login");
+        textField.placeholder = NSLocalizedString(@"Symbol", @"Login");
     }];
     
-    UIAlertAction *okAction = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"OK", @"OK Action")
+    UIAlertAction *addAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Add", @"OK Action")
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action) {
                                    UITextField *symbol = alertController.textFields.firstObject;
-                                   NSLog(@"symbol was %@", symbol.text);
                                    [self postStock:symbol.text];
-                                   [self.tableView reloadData];
+                                   [_stocks addObject:symbol.text];
+                                   [self getStocks];
                                }];
-    [alertController addAction:okAction];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:
+                            UIAlertActionStyleDefault
+                            handler:^(UIAlertAction * action) {
+                                [alertController dismissViewControllerAnimated:YES completion:nil];
+                            }];
+    
+    [alertController addAction:addAction];
+    [alertController addAction:cancelAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
     
+}
+
+- (IBAction)refresh:(UIRefreshControl *)sender {
+    [self getStocks];
+    [sender endRefreshing];
 }
 
 /*
@@ -201,7 +214,7 @@
 //        StockDetailViewController *nextVC = segue.destinationViewController;
         
 //        nextVC.stockTitleLabel.text = stock.full_title;
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         StockDetailViewController *destViewController = segue.destinationViewController;
         destViewController.stock = stock;
                     
