@@ -49,6 +49,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Stocks" id="lc6-Q8-FwN">
+                        <barButtonItem key="leftBarButtonItem" title="Login" id="I15-Wy-NBD" userLabel="Login">
+                            <connections>
+                                <action selector="loginUserButtonPressed:" destination="I0Z-Td-aPz" id="cHI-qT-8f4"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Quu-bi-kc1" userLabel="Add Button">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="AGo-O9-k60">
                                 <rect key="frame" x="372" y="11" width="22" height="22"/>

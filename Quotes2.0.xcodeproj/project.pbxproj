@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270D791F1C7A9AB300B81C29 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 270D791E1C7A9AB300B81C29 /* User.m */; };
+		270D79221C7BE87600B81C29 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 270D79211C7BE87600B81C29 /* UserManager.m */; };
 		2797EE6A1C6C1D4900C4F691 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2797EE691C6C1D4900C4F691 /* main.m */; };
 		2797EE6D1C6C1D4900C4F691 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2797EE6C1C6C1D4900C4F691 /* AppDelegate.m */; };
 		2797EE731C6C1D4900C4F691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2797EE711C6C1D4900C4F691 /* Main.storyboard */; };
@@ -41,6 +43,10 @@
 
 /* Begin PBXFileReference section */
 		0791B45B375CAF8870418CE4 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		270D791D1C7A9AB300B81C29 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		270D791E1C7A9AB300B81C29 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		270D79201C7BE87600B81C29 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
+		270D79211C7BE87600B81C29 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		2797EE651C6C1D4900C4F691 /* Quotes2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quotes2.0.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2797EE691C6C1D4900C4F691 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2797EE6B1C6C1D4900C4F691 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -123,6 +129,10 @@
 				2797EE6C1C6C1D4900C4F691 /* AppDelegate.m */,
 				2797EEA11C6D236500C4F691 /* StockTableViewController.h */,
 				2797EEA21C6D236500C4F691 /* StockTableViewController.m */,
+				270D79201C7BE87600B81C29 /* UserManager.h */,
+				270D79211C7BE87600B81C29 /* UserManager.m */,
+				270D791D1C7A9AB300B81C29 /* User.h */,
+				270D791E1C7A9AB300B81C29 /* User.m */,
 				2797EE9E1C6C1E3500C4F691 /* Stock.h */,
 				2797EE9F1C6C1E3500C4F691 /* Stock.m */,
 				2797EE711C6C1D4900C4F691 /* Main.storyboard */,
@@ -366,6 +376,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				270D791F1C7A9AB300B81C29 /* User.m in Sources */,
+				270D79221C7BE87600B81C29 /* UserManager.m in Sources */,
 				2797EE761C6C1D4900C4F691 /* Quotes2_0.xcdatamodeld in Sources */,
 				2797EE6D1C6C1D4900C4F691 /* AppDelegate.m in Sources */,
 				2797EEA91C6D6D9A00C4F691 /* Earnings.m in Sources */,
