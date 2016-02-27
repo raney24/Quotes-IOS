@@ -17,30 +17,29 @@
     [user setPassword:password];
     
     NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
-    
-    NSString *csrf = [self CSRFTokenFromURL:@"https://evening-everglades-1560.herokuapp.com/login"];
-    
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:baseURL];
-    [client setDefaultHeader:@"Accept" value:RKMIMETypeJSON];
-    [client setDefaultHeader:@"X-CSRFToken" value:csrf];
+//    NSString *token = @" Token 898bd6a21b9a1efa9619209e2dbd8d5ae001a57d";
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     
-    RKObjectManager *objectManager = [[RKObjectManager alloc] initWithHTTPClient:client];
-    
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"username", @"password"]];
+    [requestMapping addAttributeMappingsFromArray:@[@"username", @"password", @"token"]];
     
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[User class] rootKeyPath:nil];
-
+    RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api-token-auth/" keyPath:nil statusCodes:statusCodes];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[User class] rootKeyPath:nil method:RKRequestMethodPOST];
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+    
+    [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
+    
+//    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:token];
+    
+    [objectManager.HTTPClient setAuthorizationHeaderWithUsername:user.username password:user.password];
+    
     [objectManager addRequestDescriptor:requestDescriptor];
     
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodPOST pathPattern:@"/api-auth/login/" keyPath:nil statusCodes:statusCodes];
-    
-    [objectManager addResponseDescriptor:responseDescriptor];
-    
-    [objectManager postObject:user path:@"/api-auth/login/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"It worked: %@", [mappingResult array]);
+    [objectManager postObject:user path:@"/api-token-auth/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Success: %@", mappingResult.firstObject);
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);
     }];

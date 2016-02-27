@@ -16,7 +16,7 @@
 @property (nonatomic, strong) RKObjectManager *objectManager;
 @property (nonatomic, strong) AFHTTPClient *client;
 
+
 -(void)loginWithUserName:(NSString *)username password:(NSString *)password;
-- (NSString *)CSRFTokenFromURL:(NSString *)url;
 
 @end

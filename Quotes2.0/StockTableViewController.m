@@ -23,7 +23,7 @@
 @implementation StockTableViewController
 
 - (void)viewDidLoad {
-    [self getStocks];
+//    [self getStocks];
     [[UserManager alloc] loginWithUserName:@"raney24" password:@"sfenfcb@$"];
     [super viewDidLoad];
     
@@ -86,6 +86,7 @@
     // initialize AFNetworking HTTPClient
     
     NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
+    NSString *token = @" Token 898bd6a21b9a1efa9619209e2dbd8d5ae001a57d";
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     
@@ -94,18 +95,16 @@
     
     RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
     
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodAny];
-    
-    RKRequestDescriptor *loginDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[User class] rootKeyPath:nil method:RKRequestMethodAny];
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodPOST];
     
     RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
     
     [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
     
-    User *user = [self loginUser];
+    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:token];
     
-    [objectManager.HTTPClient setAuthorizationHeaderWithUsername:user.username password:user.password];
-    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addRequestDescriptorsFromArray:@[requestDescriptor]];
+    
     
     Stock *newStock = [Stock new];
     newStock.symbol = symbolToAdd;
@@ -115,6 +114,7 @@
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);
     }];
+
 
 }
 
@@ -135,7 +135,9 @@
     
     [objectManager addResponseDescriptor:indivResponseDescriptor];
     
-    [objectManager.HTTPClient setAuthorizationHeaderWithUsername:@"raney24" password:@"sfenfcb@$"];
+//    [objectManager.HTTPClient setAuthorizationHeaderWithUsername:@"raney24" password:@"sfenfcb@$"];
+    [objectManager.HTTPClient setAuthorizationHeaderWithToken:@"898bd6a21b9a1efa96192"];
+    
     [objectManager addRequestDescriptor:requestDescriptor];
     
     Stock *stockToDelete = [Stock new];

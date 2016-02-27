@@ -10,6 +10,7 @@
 #import <RestKit/RestKit.h>
 #import "Stock.h"
 
+
 @interface AppDelegate ()
 
 @property(nonatomic, strong) NSArray *stocks;
@@ -22,6 +23,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
     return YES;
 }
 
