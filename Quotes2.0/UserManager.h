@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <RestKit/RestKit.h>
 #import "User.h"
+#import "AppController.h"
 
 @interface UserManager : NSObject
 
@@ -17,6 +18,6 @@
 @property (nonatomic, strong) AFHTTPClient *client;
 
 
--(void)loginWithUserName:(NSString *)username password:(NSString *)password;
+-(void)loginWithUserName:(NSString *)username password:(NSString *)password onComplete:(KRCompletionBlock)onComplete;
 
 @end

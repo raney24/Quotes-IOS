@@ -8,9 +8,10 @@
 
 #import "UserManager.h"
 
+
 @implementation UserManager
 
--(void)loginWithUserName:(NSString *)username password:(NSString *)password
+-(void)loginWithUserName:(NSString *)username password:(NSString *)password onComplete:(KRCompletionBlock)onComplete
 {
     User *user = [[User alloc] init];
     [user setUsername:username];
@@ -38,11 +39,20 @@
     
     [objectManager addRequestDescriptor:requestDescriptor];
     
+//    __block NSString *token = [NSString alloc];
+    
+    
     [objectManager postObject:user path:@"/api-token-auth/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Success: %@", mappingResult.firstObject);
+        NSLog(@"Success: %@", mappingResult.firstObject[@"token"]);
+        NSString *token = [@"token " stringByAppendingString:mappingResult.firstObject[@"token"]];
+        NSDictionary *tokenDict = @{@"token" : token };
+        NSLog(@"tokenDict: %@", tokenDict);
+        onComplete(YES, tokenDict);
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);
     }];
+    
+//    return token;
     
 }
 

@@ -12,19 +12,19 @@
 #import "Stock.h"
 #import "User.h"
 #import "UserManager.h"
+#import "AppController.h"
 
 @interface StockTableViewController ()
 
 @property(nonatomic, strong) NSMutableArray *stocks;
-@property(nonatomic, strong) User *user;
+@property(nonatomic) BOOL *isUserLoggedIn;
 
 @end
 
 @implementation StockTableViewController
 
 - (void)viewDidLoad {
-//    [self getStocks];
-    [[UserManager alloc] loginWithUserName:@"raney24" password:@"sfenfcb@$"];
+    [self getStocks];
     [super viewDidLoad];
     
     
@@ -35,7 +35,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(User*)loginUser
+-(void)loginUser
 {
     NSString *alertTitle = @"Enter Credentials";
     //    NSString *alertMessage = @"(lowercase is fine)";
@@ -60,6 +60,10 @@
                                     UITextField *password = alertController.textFields[1];
                                     user.username = username.text;
                                     user.password = password.text;
+                                    [[UserManager alloc] loginWithUserName:user.username password:user.password onComplete:^(BOOL success, NSDictionary *userInfo) {
+                                        user.token = userInfo[@"token"];
+                                        [AppController sharedController].user = user;
+                                    }];
                                 }];
     
     UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:
@@ -73,20 +77,16 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
     
-    return user;
-}
-
-- (BOOL)isUserLoggedIn:(User *)user
-{
-    return YES;
+    
 }
 
 - (void)postStock:(NSString *)symbolToAdd
 {
     // initialize AFNetworking HTTPClient
+    // check if logged in, [appController sharedController].isAuthenticated
     
     NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
-    NSString *token = @" Token 898bd6a21b9a1efa9619209e2dbd8d5ae001a57d";
+//    NSString *token = @" Token 898bd6a21b9a1efa9619209e2dbd8d5ae001a57d";
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     
@@ -100,6 +100,8 @@
     RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
     
     [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
+    
+    NSString *token = [AppController sharedController].user.token;
     
     [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:token];
     
@@ -225,6 +227,7 @@
 }
 
 - (IBAction)addStockButtonPressed:(id)sender {
+    
     NSString *alertTitle = @"Enter Stock Symbol";
 //    NSString *alertMessage = @"(lowercase is fine)";
     
@@ -260,6 +263,7 @@
 
 - (IBAction)loginUserButtonPressed:(UIBarButtonItem *)sender {
     [self loginUser];
+    
 }
 
 - (IBAction)refresh:(UIRefreshControl *)sender {
@@ -279,6 +283,7 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self loginUser];
         // Delete the row from the data source
         Stock *stockToDelete = [_stocks objectAtIndex:indexPath.row];
         NSString *stockId = stockToDelete.stockId;
