@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "LoginViewController.h"
 
 @interface StockTableViewController : UITableViewController <UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
@@ -16,5 +17,6 @@
 - (IBAction)refresh:(UIRefreshControl *)sender;
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) LoginViewController *loginViewController;
 
 @end

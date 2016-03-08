@@ -10,6 +10,8 @@
 		270D791F1C7A9AB300B81C29 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 270D791E1C7A9AB300B81C29 /* User.m */; };
 		270D79221C7BE87600B81C29 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 270D79211C7BE87600B81C29 /* UserManager.m */; };
 		27554F5A1C854983001752E9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27554F591C854983001752E9 /* AppController.m */; };
+		27554F621C865B7B001752E9 /* KRObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27554F611C865B7B001752E9 /* KRObjectManager.m */; };
+		27554F681C88F6AF001752E9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27554F671C88F6AF001752E9 /* LoginViewController.m */; };
 		2797EE6A1C6C1D4900C4F691 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2797EE691C6C1D4900C4F691 /* main.m */; };
 		2797EE6D1C6C1D4900C4F691 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2797EE6C1C6C1D4900C4F691 /* AppDelegate.m */; };
 		2797EE731C6C1D4900C4F691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2797EE711C6C1D4900C4F691 /* Main.storyboard */; };
@@ -50,6 +52,10 @@
 		270D79211C7BE87600B81C29 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		27554F581C854983001752E9 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		27554F591C854983001752E9 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		27554F601C865B7B001752E9 /* KRObjectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRObjectManager.h; sourceTree = "<group>"; };
+		27554F611C865B7B001752E9 /* KRObjectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRObjectManager.m; sourceTree = "<group>"; };
+		27554F661C88F6AF001752E9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		27554F671C88F6AF001752E9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		2797EE651C6C1D4900C4F691 /* Quotes2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quotes2.0.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2797EE691C6C1D4900C4F691 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2797EE6B1C6C1D4900C4F691 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -103,6 +109,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27554F5E1C865A0A001752E9 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				270D791D1C7A9AB300B81C29 /* User.h */,
+				270D791E1C7A9AB300B81C29 /* User.m */,
+				2797EE9E1C6C1E3500C4F691 /* Stock.h */,
+				2797EE9F1C6C1E3500C4F691 /* Stock.m */,
+				2797EEA71C6D6D9A00C4F691 /* Earnings.h */,
+				2797EEA81C6D6D9A00C4F691 /* Earnings.m */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
+		27554F5F1C865A14001752E9 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				27554F661C88F6AF001752E9 /* LoginViewController.h */,
+				27554F671C88F6AF001752E9 /* LoginViewController.m */,
+				2797EEA11C6D236500C4F691 /* StockTableViewController.h */,
+				2797EEA21C6D236500C4F691 /* StockTableViewController.m */,
+				2797EEA41C6D304C00C4F691 /* StockDetailViewController.h */,
+				2797EEA51C6D304C00C4F691 /* StockDetailViewController.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
 		2797EE5C1C6C1D4900C4F691 = {
 			isa = PBXGroup;
 			children = (
@@ -132,19 +164,13 @@
 				2797EE6C1C6C1D4900C4F691 /* AppDelegate.m */,
 				27554F581C854983001752E9 /* AppController.h */,
 				27554F591C854983001752E9 /* AppController.m */,
-				2797EEA11C6D236500C4F691 /* StockTableViewController.h */,
-				2797EEA21C6D236500C4F691 /* StockTableViewController.m */,
+				27554F601C865B7B001752E9 /* KRObjectManager.h */,
+				27554F611C865B7B001752E9 /* KRObjectManager.m */,
+				27554F5F1C865A14001752E9 /* ViewControllers */,
 				270D79201C7BE87600B81C29 /* UserManager.h */,
 				270D79211C7BE87600B81C29 /* UserManager.m */,
-				270D791D1C7A9AB300B81C29 /* User.h */,
-				270D791E1C7A9AB300B81C29 /* User.m */,
-				2797EE9E1C6C1E3500C4F691 /* Stock.h */,
-				2797EE9F1C6C1E3500C4F691 /* Stock.m */,
+				27554F5E1C865A0A001752E9 /* Objects */,
 				2797EE711C6C1D4900C4F691 /* Main.storyboard */,
-				2797EEA41C6D304C00C4F691 /* StockDetailViewController.h */,
-				2797EEA51C6D304C00C4F691 /* StockDetailViewController.m */,
-				2797EEA71C6D6D9A00C4F691 /* Earnings.h */,
-				2797EEA81C6D6D9A00C4F691 /* Earnings.m */,
 				2797EE771C6C1D4900C4F691 /* Assets.xcassets */,
 				2797EE791C6C1D4900C4F691 /* LaunchScreen.storyboard */,
 				2797EE7C1C6C1D4900C4F691 /* Info.plist */,
@@ -384,10 +410,12 @@
 				270D791F1C7A9AB300B81C29 /* User.m in Sources */,
 				270D79221C7BE87600B81C29 /* UserManager.m in Sources */,
 				2797EE761C6C1D4900C4F691 /* Quotes2_0.xcdatamodeld in Sources */,
+				27554F621C865B7B001752E9 /* KRObjectManager.m in Sources */,
 				27554F5A1C854983001752E9 /* AppController.m in Sources */,
 				2797EE6D1C6C1D4900C4F691 /* AppDelegate.m in Sources */,
 				2797EEA91C6D6D9A00C4F691 /* Earnings.m in Sources */,
 				2797EE6A1C6C1D4900C4F691 /* main.m in Sources */,
+				27554F681C88F6AF001752E9 /* LoginViewController.m in Sources */,
 				2797EEA31C6D236500C4F691 /* StockTableViewController.m in Sources */,
 				2797EEA61C6D304C00C4F691 /* StockDetailViewController.m in Sources */,
 				2797EEA01C6C1E3500C4F691 /* Stock.m in Sources */,

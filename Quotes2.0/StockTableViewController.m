@@ -8,11 +8,13 @@
 
 #import "StockTableViewController.h"
 #import "StockDetailViewController.h"
+#import "LoginViewController.h"
 #import <RestKit/RestKit.h>
 #import "Stock.h"
 #import "User.h"
 #import "UserManager.h"
 #import "AppController.h"
+#import "KRObjectManager.h"
 
 @interface StockTableViewController ()
 
@@ -35,88 +37,50 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(void)loginUser
-{
-    NSString *alertTitle = @"Enter Credentials";
-    //    NSString *alertMessage = @"(lowercase is fine)";
-    
-    User *user = [[User alloc] init];
-    
-    UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = NSLocalizedString(@"Username", @"username");
-    }];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = NSLocalizedString(@"Password", @"password");
-    }];
-    
-    UIAlertAction *addAction = [UIAlertAction
-                                actionWithTitle:NSLocalizedString(@"Login", @"login")
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction *action) {
-                                    UITextField *username = alertController.textFields[0];
-                                    UITextField *password = alertController.textFields[1];
-                                    user.username = username.text;
-                                    user.password = password.text;
-                                    [[UserManager alloc] loginWithUserName:user.username password:user.password onComplete:^(BOOL success, NSDictionary *userInfo) {
-                                        user.token = userInfo[@"token"];
-                                        [AppController sharedController].user = user;
-                                    }];
-                                }];
-    
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:
-                                   UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction * action) {
-                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
-                                                         }];
-    
-    [alertController addAction:addAction];
-    [alertController addAction:cancelAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-    
-    
-}
 
 - (void)postStock:(NSString *)symbolToAdd
 {
-    // initialize AFNetworking HTTPClient
     // check if logged in, [appController sharedController].isAuthenticated
     
-    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
-//    NSString *token = @" Token 898bd6a21b9a1efa9619209e2dbd8d5ae001a57d";
+//    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
+//    
+//    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+//    
+//    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+//    [requestMapping addAttributeMappingsFromArray:@[@"symbol"]];
+//    
+//    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
+//    
+//    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodPOST];
+//    
+////    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+//    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
+//    
+//    [objectManager addResponseDescriptorsFromArray:@[responseDescriptor]];
+//    
+//    NSString *token = [AppController sharedController].user.token;
+//    
+//    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:token];
+//    
+//    [objectManager addRequestDescriptorsFromArray:@[requestDescriptor]];
     
-    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-    
-    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"symbol"]];
-    
-    RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
-    
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodPOST];
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-    
-    [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
-    
-    NSString *token = [AppController sharedController].user.token;
-    
-    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:token];
-    
-    [objectManager addRequestDescriptorsFromArray:@[requestDescriptor]];
-    
-    
-    Stock *newStock = [Stock new];
-    newStock.symbol = symbolToAdd;
-    
-    [objectManager postObject:newStock path:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    if ([AppController sharedController].isAuthenticated) {
+        RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
+        
+        Stock *newStock = [Stock new];
+        newStock.symbol = symbolToAdd;
+        
+        [objectManager postObject:newStock path:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            
+        }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"failed w error: %@", [error localizedDescription]);
+        }];
 
-    }failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"failed w error: %@", [error localizedDescription]);
-    }];
-
+    } else {
+        LoginViewController *nextVC = [[LoginViewController init] alloc];
+        [self showViewController:nextVC sender:nil];
+    }
+    
 
 }
 
@@ -146,8 +110,6 @@
     stockToDelete.stockId = stockId;
     
     NSString *delURL = [NSString stringWithFormat:@"https://evening-everglades-1560.herokuapp.com/api/v1/stocks/%@", stockId];
-    
-    NSLog(@"%@", delURL);
     
     [objectManager deleteObject:stockToDelete path:delURL parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Success");
@@ -180,7 +142,6 @@
                                                        }];
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-    
     
     RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:stockMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
     
@@ -227,42 +188,45 @@
 }
 
 - (IBAction)addStockButtonPressed:(id)sender {
-    
-    NSString *alertTitle = @"Enter Stock Symbol";
-//    NSString *alertMessage = @"(lowercase is fine)";
-    
-    UIAlertController *alertController = [UIAlertController
-                                alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = NSLocalizedString(@"Symbol", @"Login");
-    }];
-    
-    UIAlertAction *addAction = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"Add", @"OK Action")
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction *action) {
-                                   UITextField *symbol = alertController.textFields.firstObject;
-                                   [self postStock:symbol.text];
-                                   [_stocks addObject:symbol.text];
-                                   [self getStocks];
-                               }];
-    
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:
-                            UIAlertActionStyleDefault
-                            handler:^(UIAlertAction * action) {
-                                [alertController dismissViewControllerAnimated:YES completion:nil];
-                            }];
-    
-    [alertController addAction:addAction];
-    [alertController addAction:cancelAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+    if ([AppController sharedController].isAuthenticated) {
+        NSString *alertTitle = @"Enter Stock Symbol";
+    //    NSString *alertMessage = @"(lowercase is fine)";
+        
+        UIAlertController *alertController = [UIAlertController
+                                    alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = NSLocalizedString(@"Symbol", @"Login");
+        }];
+        
+        UIAlertAction *addAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"Add", @"OK Action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action) {
+                                       UITextField *symbol = alertController.textFields.firstObject;
+                                       [self postStock:symbol.text];
+                                       [_stocks addObject:symbol.text];
+                                       [self getStocks];
+                                   }];
+        
+        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:
+                                UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action) {
+                                    [alertController dismissViewControllerAnimated:YES completion:nil];
+                                }];
+        
+        [alertController addAction:addAction];
+        [alertController addAction:cancelAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else {
+        [self performSegueWithIdentifier:@"loginUser" sender:nil];
+    }
     
 }
 
 - (IBAction)loginUserButtonPressed:(UIBarButtonItem *)sender {
-    [self loginUser];
+    [self performSegueWithIdentifier:@"loginUser" sender:nil];
     
 }
 
@@ -283,7 +247,7 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self loginUser];
+        // check if user is logged in
         // Delete the row from the data source
         Stock *stockToDelete = [_stocks objectAtIndex:indexPath.row];
         NSString *stockId = stockToDelete.stockId;
@@ -318,15 +282,11 @@
 
         Stock *stock = [_stocks objectAtIndex:self.tableView.indexPathForSelectedRow.row];
         
-//        StockDetailViewController *nextVC = segue.destinationViewController;
-        
-//        nextVC.stockTitleLabel.text = stock.full_title;
-//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         StockDetailViewController *destViewController = segue.destinationViewController;
         destViewController.stock = stock;
-                    
-//        StockDetailViewController *controller = (StockDetailViewController *)[[segue destinationViewController] topViewController];
         
+    } else if ([[segue identifier] isEqualToString:@"loginUser"]) {
+        LoginViewController *destViewController = segue.destinationViewController;
     }
 }
 @end

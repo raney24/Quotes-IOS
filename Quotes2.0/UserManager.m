@@ -43,10 +43,8 @@
     
     
     [objectManager postObject:user path:@"/api-token-auth/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Success: %@", mappingResult.firstObject[@"token"]);
         NSString *token = [@"token " stringByAppendingString:mappingResult.firstObject[@"token"]];
         NSDictionary *tokenDict = @{@"token" : token };
-        NSLog(@"tokenDict: %@", tokenDict);
         onComplete(YES, tokenDict);
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"failed w error: %@", [error localizedDescription]);

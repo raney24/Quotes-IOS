@@ -7,6 +7,8 @@
 //
 
 #import "AppController.h"
+#import "KRObjectManager.h"
+#import <RestKit/RestKit.h>
 #import "User.h"
 
 static AppController *_sharedController = nil;
@@ -24,12 +26,15 @@ static AppController *_sharedController = nil;
 }
 
 -(void)setup {
+    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
     if (self.user != nil) {
         // bypass login
     } else if (self.savedAuthToken.length == 0) {
         // go to login
+        
     } else {
         // call login api (send token)
+        
         // if success, go past login
         // if ! success, go to login
     }
@@ -41,8 +46,9 @@ static AppController *_sharedController = nil;
 
 -(void)processLoginWithUser:(User *)user {
     self.user = user;
-    
-    //[objectManager.HTTPClient setDefaultHeader:@"Authorization" value:[AppController sharedController].user.token];
+    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
+
+    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:[AppController sharedController].user.token];
     
     
     
