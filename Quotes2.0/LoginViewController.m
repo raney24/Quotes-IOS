@@ -10,6 +10,7 @@
 #import "AppController.h"
 #import "KRObjectManager.h"
 #import "User.h"
+#import "UserManager.h"
 #import <RestKit/RestKit.h>
 
 @interface LoginViewController ()
@@ -43,15 +44,16 @@
     NSString *username = _usernameTextField.text;
     NSString *password = _passwordTextField.text;
     
-    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
-    User *user;
-    user.username = username;
-    user.password = password;
-    [AppController sharedController].user = user;
+    User *user = [[User alloc] init];
+    [user setUsername:username];
+    [user setPassword:password];
     
-    
-    NSLog(@"username: %@", username);
-    NSLog(@"password: %@", password);
+    AppController *sc = [AppController sharedController];
+    [sc processLoginWithUser:user];
+
+    if ([AppController sharedController].isAuthenticated) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
     
 }
 

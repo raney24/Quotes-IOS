@@ -10,6 +10,7 @@
 #import "KRObjectManager.h"
 #import <RestKit/RestKit.h>
 #import "User.h"
+#import "UserManager.h"
 
 static AppController *_sharedController = nil;
 
@@ -18,7 +19,6 @@ static AppController *_sharedController = nil;
 +(AppController *)sharedController {
     if (!_sharedController) {
         _sharedController = [[AppController alloc] init];
-        
         [_sharedController setup];
     }
     
@@ -26,12 +26,14 @@ static AppController *_sharedController = nil;
 }
 
 -(void)setup {
-    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
     if (self.user != nil) {
         // bypass login
     } else if (self.savedAuthToken.length == 0) {
-        // go to login
+//        // go to login
         
+//        [[UserManager alloc] loginWithUserName:self.user.username password:self.user.password onComplete:^(BOOL success, NSDictionary *userInfo) {
+//            self.user.token = userInfo[@"token"];
+//        }];
     } else {
         // call login api (send token)
         
@@ -48,9 +50,12 @@ static AppController *_sharedController = nil;
     self.user = user;
     RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
 
-    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:[AppController sharedController].user.token];
+    [[UserManager alloc] loginWithUserName:user.username password:user.password onComplete:^(BOOL success, NSDictionary *userInfo) {
+        self.user.token = userInfo[@"token"];
+        [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:self.user.token];
+    }];
     
-    
+
     
     self.savedAuthToken = self.user.token;
     
@@ -71,6 +76,17 @@ static AppController *_sharedController = nil;
     NSUserDefaults *userPreferences = [NSUserDefaults standardUserDefaults];
     [userPreferences setObject:value forKey:@"stockLoginAuthToken"];
     [userPreferences synchronize];
+}
+
++ (id)allocWithZone:(struct _NSZone *)zone
+{
+    @synchronized(self) {
+        if (!_sharedController) {
+            _sharedController = [super allocWithZone:zone];
+            return _sharedController;
+        }
+    }
+    return nil;
 }
 
 

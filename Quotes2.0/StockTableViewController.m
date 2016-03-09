@@ -40,30 +40,6 @@
 
 - (void)postStock:(NSString *)symbolToAdd
 {
-    // check if logged in, [appController sharedController].isAuthenticated
-    
-//    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
-//    
-//    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-//    
-//    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-//    [requestMapping addAttributeMappingsFromArray:@[@"symbol"]];
-//    
-//    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
-//    
-//    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodPOST];
-//    
-////    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-//    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
-//    
-//    [objectManager addResponseDescriptorsFromArray:@[responseDescriptor]];
-//    
-//    NSString *token = [AppController sharedController].user.token;
-//    
-//    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value:token];
-//    
-//    [objectManager addRequestDescriptorsFromArray:@[requestDescriptor]];
-    
     if ([AppController sharedController].isAuthenticated) {
         RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
         
@@ -86,68 +62,30 @@
 
 -(void)deleteStock:(NSString *)stockId
 {
-    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
-    
-    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-    
-    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"stockId"]];
-    
-    RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:requestMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
-    
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodAny];
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-    
-    [objectManager addResponseDescriptor:indivResponseDescriptor];
-    
-//    [objectManager.HTTPClient setAuthorizationHeaderWithUsername:@"raney24" password:@"sfenfcb@$"];
-    [objectManager.HTTPClient setAuthorizationHeaderWithToken:@"898bd6a21b9a1efa96192"];
-    
-    [objectManager addRequestDescriptor:requestDescriptor];
-    
-    Stock *stockToDelete = [Stock new];
-    stockToDelete.stockId = stockId;
-    
-    NSString *delURL = [NSString stringWithFormat:@"https://evening-everglades-1560.herokuapp.com/api/v1/stocks/%@", stockId];
-    
-    [objectManager deleteObject:stockToDelete path:delURL parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Success");
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure");
-    }];
-    
-//    [objectManager postObject:newStock path:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    
-//    }failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        NSLog(@"failed w error: %@", [error localizedDescription]);
-//    }];
+    if ([AppController sharedController].isAuthenticated) {
+        RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
+        Stock *stockToDelete = [Stock new];
+        stockToDelete.stockId = stockId;
+        
+        NSString *delURL = [NSString stringWithFormat:@"https://evening-everglades-1560.herokuapp.com/api/v1/stocks/%@", stockId];
+        
+        [objectManager deleteObject:stockToDelete path:delURL parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSLog(@"Success");
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Failure");
+        }];
+
+    } else {
+        LoginViewController *nextVC = [[LoginViewController init] alloc];
+        [self showViewController:nextVC sender:nil];
+    }
 
 }
 
 - (void)getStocks
 {
-    // initialize AFNetworking HTTPClient
     
-    NSURL *baseURL = [NSURL URLWithString:@"https://evening-everglades-1560.herokuapp.com"];
-    
-    RKObjectMapping *stockMapping = [RKObjectMapping mappingForClass:[Stock class]];
-    [stockMapping addAttributeMappingsFromDictionary:@{
-                                                       @"id": @"stockId",
-                                                       @"submitter": @"submitter",
-                                                       @"projected_er_date": @"projected_er_date",
-                                                       @"full_title": @"full_title",
-                                                       @"symbol": @"symbol",
-                                                       @"submitted_on": @"submitted_on"
-                                                       }];
-    
-    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-    
-    RKResponseDescriptor *indivResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:stockMapping method:RKRequestMethodAny pathPattern:@"/api/v1/stocks/" keyPath:nil statusCodes:statusCodes];
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-    [objectManager addResponseDescriptorsFromArray:@[indivResponseDescriptor]];
-    
+    RKObjectManager *objectManager = [KRObjectManager sharedObjectManager].objectManager;
     [objectManager getObjectsAtPath:@"/api/v1/stocks/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         _stocks = [[NSMutableArray alloc] initWithArray:mappingResult.array];
         [self.tableView reloadData];

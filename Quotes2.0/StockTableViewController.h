@@ -18,5 +18,6 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) LoginViewController *loginViewController;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *userStatusBarButtonLabel;
 
 @end

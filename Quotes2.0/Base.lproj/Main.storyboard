@@ -35,7 +35,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pla-ue-ee3">
                                 <rect key="frame" x="121" y="239" width="173" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYQ-q4-b5y">
                                 <rect key="frame" x="184" y="297" width="46" height="30"/>
@@ -131,6 +131,9 @@
                             <action selector="refresh:" destination="I0Z-Td-aPz" eventType="valueChanged" id="abm-0z-5M8"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="userStatusBarButtonLabel" destination="I15-Wy-NBD" id="5Jz-Z6-UWN"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e5t-QT-7UK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -157,7 +160,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Wt-Ij-ZQc" customClass="BEMSimpleLineGraphView">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Wt-Ij-ZQc" customClass="BEMSimpleLineGraphView">
                                 <rect key="frame" x="95" y="413" width="252" height="295"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>

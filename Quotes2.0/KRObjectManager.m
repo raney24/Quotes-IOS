@@ -35,8 +35,19 @@ static KRObjectManager *_sharedObjectManager = nil;
     
     // Mappings
     
-    RKObjectMapping *stockMapping = [RKObjectMapping requestMapping];
-    [stockMapping addAttributeMappingsFromArray:@[@"symbol"]];
+    RKObjectMapping *stockMapping = [RKObjectMapping mappingForClass:[Stock class]];
+
+    [stockMapping addAttributeMappingsFromDictionary:@{
+                                                           @"id": @"stockId",
+                                                           @"submitter": @"submitter",
+                                                           @"projected_er_date": @"projected_er_date",
+                                                           @"full_title": @"full_title",
+                                                           @"symbol": @"symbol",
+                                                           @"submitted_on": @"submitted_on"
+                                                           }];
+    
+//    RKObjectMapping *addStockMapping = [RKObjectMapping requestMapping];
+//    [stockMapping addAttributeMappingsFromArray:@[@"symbol"]];
     
     RKObjectMapping *earningsMapping = [RKObjectMapping mappingForClass:[Earnings class]];
     [earningsMapping addAttributeMappingsFromArray:@[
@@ -64,7 +75,7 @@ static KRObjectManager *_sharedObjectManager = nil;
     
     // Request Descriptors
     
-    RKRequestDescriptor *stockRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:stockMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodPOST];
+    RKRequestDescriptor *stockRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:addStockRequestMapping objectClass:[Stock class] rootKeyPath:nil method:RKRequestMethodPOST];
     
     RKRequestDescriptor *userRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:userRequestMapping objectClass:[User class] rootKeyPath:nil method:RKRequestMethodPOST];
     
